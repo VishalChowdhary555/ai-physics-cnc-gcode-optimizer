@@ -6,6 +6,37 @@ This project combines **physics-based machining models, machine learning (CatBoo
 This system bridges the gap between **theoretical machining optimization and real-world CNC implementation**.
 
 ---
+# Project Motivation
+
+Medium-Density Fibreboard (MDF) is widely used in furniture manufacturing and interior applications due to its uniform structure and affordability. However, MDF machining presents several challenges:
+
+rapid tool wear due to abrasive fibres
+
+high cutting forces
+
+elevated cutting temperatures
+
+vibration instability
+
+poor surface finish
+
+Traditional CNC machining often uses aggressive cutting strategies with large depths of cut and high feed rates. While this reduces machining time, it significantly degrades machining quality and tool life.
+
+Existing research has explored optimization methods such as:
+
+•Taguchi optimization
+• Regression models
+• Response Surface Methodology
+• Machine Learning Prediction
+
+However, these approaches typically recommend optimal parameters without directly modifying CNC machining instructions (G-code).
+
+This project addresses that gap by:
+
+• predicting machining responses using physics-informed models and machine learning
+• optimizing machining parameters using a Genetic Algorithm
+• automatically regenerating optimized CNC G-code for real machine execution
+
 
 # Problem Statement
 
@@ -48,23 +79,49 @@ This project solves that problem by:
 # System Architecture
 The optimization pipeline follows this workflow:
 
-Original G-code
-↓
-Parse machining parameters and toolpath
-↓
-Physics-based machining models
-↓
-Synthetic dataset generation
-↓
-Machine learning model training (CatBoost)
-↓
-Genetic Algorithm optimization
-↓
-Optimized machining parameters
-↓
-Regenerate optimized G-code
-↓
-Run optimized machining process
+                 ┌─────────────────────┐
+                 │ Original CNC G-code │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   G-code Parser     │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+               ┌─────────────────────────┐
+               │ Physics-Based Models    │
+               │ Cutting force           │
+               │ Surface roughness       │
+               │ Tool wear               │
+               │ Vibration               │
+               │ Temperature             │
+               └──────────┬──────────────┘
+                          │
+                          ▼
+              ┌──────────────────────────┐
+              │ Synthetic Dataset        │
+              │ Generation               │
+              └──────────┬───────────────┘
+                         │
+                         ▼
+             ┌───────────────────────────┐
+             │ Machine Learning Model    │
+             │ CatBoost / Random Forest  │
+             └──────────┬────────────────┘
+                        │
+                        ▼
+           ┌─────────────────────────────┐
+           │ Genetic Algorithm Optimizer │
+           └──────────┬──────────────────┘
+                      │
+                      ▼
+           ┌─────────────────────────────┐
+           │ Regenerate Optimized G-code │
+           └──────────┬──────────────────┘
+                      │
+                      ▼
+              Optimized CNC Machining
 
 
 ---
@@ -84,6 +141,58 @@ The system predicts the following machining responses:
 These responses are modeled using **physics-informed equations combined with machine learning trend prediction**.
 
 ---
+# Physics-Based Machining Models
+
+Key machining responses are estimated using physics-informed equations.
+
+1. Cutting Force
+
+   Fc = Cf (vc/120)^αvc (fz/0.08)^αfz ap^αap w^αw
+   
+Where:
+
+vc = cutting speed
+fz = feed per tooth
+ap = depth of cut
+w = width of cut
+D = tool diameter
+
+Additional corrections incorporate:
+
+rake angle
+
+relief angle
+
+helix angle
+
+chip thinning factor
+
+2. Surface Roughness
+
+Surface roughness is estimated using feed per tooth and tool geometry relationships with dynamic corrections for machining conditions.
+
+3. Tool Wear Rate
+
+Tool wear rate is modeled as a function of:
+
+cutting speed
+
+feed per tooth
+
+depth of cut
+
+tool geometry
+
+4. Additional Responses
+
+The system also predicts:
+
+• vibration amplitude
+• cutting temperature
+• chip load deviation
+• spindle power consumption
+
+These responses collectively describe machining stability and tool health.
 
 # Machine Learning Model
 
