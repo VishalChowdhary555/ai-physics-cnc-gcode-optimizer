@@ -63,7 +63,7 @@ def main():
     # 5. Run Genetic Algorithm optimization
     # ------------------------------------------------------------------
     print("\n[5/7] Running machining parameter optimization...")
-    best_params = optimize(model)
+    best_params = optimize(model, scalar)
     best_feed, best_depth = best_params
     print(f"Optimized Feed Rate: {best_feed:.2f}")
     print(f"Optimized Depth of Cut: {best_depth:.2f}")
