@@ -1,0 +1,24 @@
+# Core scientific computing
+numpy
+pandas
+scipy
+
+# Machine learning
+scikit-learn
+catboost
+
+# Optimization (Genetic Algorithm)
+deap
+
+# Visualization
+matplotlib
+seaborn
+
+# Jupyter environment
+jupyter
+notebook
+ipykernel
+
+# Utilities
+tqdm
+joblib
